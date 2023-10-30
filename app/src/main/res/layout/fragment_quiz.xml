@@ -1,0 +1,43 @@
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/questionView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Question Placeholder"
+        android:textSize="18sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"/>
+
+    <RadioGroup
+        android:id="@+id/answerGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/questionView"
+        android:layout_marginTop="16dp">
+
+        <RadioButton
+            android:id="@+id/choice1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Choice A"/>
+
+        <RadioButton
+            android:id="@+id/choice2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Choice B"/>
+
+        <RadioButton
+            android:id="@+id/choice3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Choice C"/>
+    </RadioGroup>
+
+</RelativeLayout>
