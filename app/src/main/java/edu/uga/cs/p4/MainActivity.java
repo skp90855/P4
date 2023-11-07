@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Read data from the CSV file and populate questions and answerChoices
         String[] questions = new String[6];
+        String[] correctAnswers = new String[6];
         String[][] answerChoices = new String[6][3];
 
         try {
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
                 String state = data[0];
                 String correctCapital = data[1];
                 questions[i] = "What is the capital of " + state + "?";
+                correctAnswers[i] = data[1];
 
                 // Choose two incorrect capital cities
                 List<String> incorrectCities = new ArrayList<>();
@@ -83,8 +85,17 @@ public class MainActivity extends AppCompatActivity {
 
         ViewPager2 pager = findViewById(R.id.viewpager);
         QuizPagerAdapter quizPagerAdapter = new QuizPagerAdapter(
-                getSupportFragmentManager(), getLifecycle(), questions, answerChoices);
+                getSupportFragmentManager(), getLifecycle(), questions, answerChoices, correctAnswers);
         pager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
         pager.setAdapter(quizPagerAdapter);
+        pager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                quizPagerAdapter.getCorrectAnswers();
+            }
+        });
+
+
     }
 }

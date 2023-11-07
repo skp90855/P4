@@ -1,6 +1,8 @@
 package edu.uga.cs.p4;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -38,5 +40,24 @@ public class QuizDatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("ALTER TABLE Questions ADD COLUMN new_column INTEGER;");
             oldVersion = 2;
         }
+    }
+
+    public boolean insertQuizData(String time, String correct) {
+        SQLiteDatabase DB = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("quiz_date", time);
+        contentValues.put("quiz_result", correct);
+        long result = DB.insert("Quizzes", null, contentValues);
+        if(result == -1) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public Cursor getQuizData() {
+        SQLiteDatabase DB = this.getWritableDatabase();
+        Cursor cursor = DB.rawQuery("SELECT * FROM Quizzes", null);
+        return cursor;
     }
 }
