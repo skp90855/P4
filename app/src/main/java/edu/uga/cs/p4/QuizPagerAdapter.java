@@ -15,6 +15,7 @@ public class QuizPagerAdapter extends FragmentStateAdapter {
     private String[] actualAnswer;
     private QuizFragment[] quizFragments;
     private ResultFragment result;
+    private int[] chosenAnswers;
 
     private int currPage = 0;
 
@@ -29,6 +30,7 @@ public class QuizPagerAdapter extends FragmentStateAdapter {
         this.answerChoices = answerChoices;
         this.actualAnswer = correctAnswers;
         quizFragments = new QuizFragment[6];
+        chosenAnswers = new int[]{-1, -1, -1, -1, -1, -1};
     }
 
     // Modify createFragment to handle the ResultFragment
@@ -43,6 +45,7 @@ public class QuizPagerAdapter extends FragmentStateAdapter {
             String correctAnswer = actualAnswer[position];
             currPage++;
             System.out.println(currPage);
+            //Add way to take answer choice in code below <------ Don't forgor or code won't work
             quizFragments[position] = QuizFragment.newInstance(position, question, choice1, choice2, choice3, correctAnswer);
             // Ensure that you return a valid Fragment instance
             return quizFragments[position];
@@ -76,5 +79,62 @@ public class QuizPagerAdapter extends FragmentStateAdapter {
         return correctAnswers;
     }
 
-    //public int
+    public void updateChosenAnswers() {
+
+    }
+
+    public void updateQuesitons() {
+
+    }
+
+    public void updateAnswerChoices() {
+
+    }
+
+    public void updateActualAnswer() {
+
+    }
+
+    public String[] getQuestions() {
+        return questions;
+    }
+
+    public String[][] getAnswerChoices() {
+        return answerChoices;
+    }
+
+    public String[] getActualAnswer() {
+        return actualAnswer;
+    }
+
+    public int[] getChosenAnswers() {return chosenAnswers;}
+
+    public void setChosenAnswers(int[] arr) {
+        chosenAnswers = arr;
+    }
+
+    public void setAnswerChoices(String[][] arr) {
+        answerChoices = arr;
+    }
+
+    public void setQuestions(String[] arr) {
+        questions = arr;
+    }
+
+    public void setActualAnswer(String[] arr) {
+        actualAnswer = arr;
+    }
+
+    public void updateCurrQuiz(int[] chosen_answers, String[][] answer_choices, String[] new_questions, String[] actual_answers) {
+        setChosenAnswers(chosen_answers);
+        setAnswerChoices(answer_choices);
+        setQuestions(new_questions);
+        setActualAnswer(actual_answers);
+        int i = 0;
+        while(quizFragments[i] != null) {
+            quizFragments[i].updateQuizFragment(new_questions[i], answer_choices[i][0], answer_choices[i][1], answer_choices[i][2], actual_answers[i], chosen_answers[i]);
+            i++;
+        }
+    }
+
 }

@@ -20,11 +20,13 @@ public class QuizFragment extends Fragment {
     private String choice3;
     private String answer;
     public int correct;
+    public int selectedChoice = -1;
 
     private RadioGroup radioGroup;
     private RadioButton choice1View;
     private RadioButton choice2View;
     private RadioButton choice3View;
+    private TextView questionView;
 
 
     public QuizFragment() {
@@ -68,10 +70,10 @@ public class QuizFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        TextView questionView = view.findViewById(R.id.questionView);
-        RadioButton choice1View = view.findViewById(R.id.choice1);
-        RadioButton choice2View = view.findViewById(R.id.choice2);
-        RadioButton choice3View = view.findViewById(R.id.choice3);
+        questionView = view.findViewById(R.id.questionView);
+        choice1View = view.findViewById(R.id.choice1);
+        choice2View = view.findViewById(R.id.choice2);
+        choice3View = view.findViewById(R.id.choice3);
 
         radioGroup = view.findViewById(R.id.answerGroup);
 
@@ -86,6 +88,8 @@ public class QuizFragment extends Fragment {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 RadioButton radioButton = getView().findViewById(checkedId);
                 String chosenAnswer = radioButton.getText().toString();
+                selectedChoice = radioGroup.indexOfChild(radioButton);
+                //System.out.println(selectedChoice);
                 if(chosenAnswer.equals(answer)) {
                     correct = 1;
                 } else {
@@ -95,4 +99,33 @@ public class QuizFragment extends Fragment {
         });
     }
 
+    public void updateQuizFragment(String question, String choice1, String choice2, String choice3, String answer, int choiceSelected) {
+        questionView.setText(question);
+        choice1View.setText(choice1);
+        choice2View.setText(choice2);
+        choice3View.setText(choice3);
+        this.answer = answer;
+        if(choiceSelected != -1) {
+            ((RadioButton)radioGroup.getChildAt(choiceSelected)).setChecked(true);
+        }
+    }
+
+
+    /*
+    public void isAnswerCorrect(int index) {
+        // get selected radio button from radioGroup
+        int selectedId = radioGroup.getCheckedRadioButtonId();
+
+        // find the radiobutton by returned id
+        RadioButton radioButton = getView().findViewById(selectedId);
+        if(selectedId != -1) {
+            System.out.println(radioButton.getText());
+        }
+        System.out.println("SelctedID:  "+ selectedId);
+        System.out.println(radioGroup);
+        //System.out.println(radioButton.getText());
+
+        //if(radioButton.getTe)
+    }
+     */
 }
