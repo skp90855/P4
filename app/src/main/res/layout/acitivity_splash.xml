@@ -5,27 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
+    android:gravity="center"
     android:orientation="vertical"
     tools:context=".SplashActivity">
-
-    <TextView
-        android:id="@+id/textViewOverview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp"
-        android:text="Welcome to My App!"
-        android:textColor="#FFFFFF"
-        android:textSize="24sp"
-        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/textViewDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="16dp"
-        android:text="In this app, you can get details about some countries that you may want to visit. The details include population, capital cities, best tourism spots, currency exchange rates, and transportation available. To get started, click or tap on the button below."
+        android:text="In this app, you will take a six-question quiz about states of the U.S and their capital cities. To begin the quiz, click on the Start Quiz button"
         android:textColor="@color/black"
         android:textSize="18sp"/>
 
@@ -33,9 +21,8 @@
         android:id="@+id/buttonOpenMain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="32dp"
-        android:text="View Countries"
+        android:layout_marginTop="64dp"
+        android:text="Start Quiz"
         android:textSize="18sp"
         android:textColor="#FFFFFF"/>
 </LinearLayout>

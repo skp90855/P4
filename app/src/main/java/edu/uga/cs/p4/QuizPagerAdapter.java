@@ -31,14 +31,11 @@ public class QuizPagerAdapter extends FragmentStateAdapter {
         quizFragments = new QuizFragment[6];
     }
 
+    // Modify createFragment to handle the ResultFragment
     @Override
     public Fragment createFragment(int position) {
-        //if(position > 0) {
-        //    quizFragments[position - 1].isAnswerCorrect(position - 1);
-        //}
+        if (position >= 0 && position < questions.length) {
 
-        // Check if the position is within bounds
-        if (position >= 0 && position < questions.length && position < answerChoices.length) {
             String question = questions[position];
             String choice1 = answerChoices[position][0];
             String choice2 = answerChoices[position][1];
@@ -49,10 +46,10 @@ public class QuizPagerAdapter extends FragmentStateAdapter {
             quizFragments[position] = QuizFragment.newInstance(position, question, choice1, choice2, choice3, correctAnswer);
             // Ensure that you return a valid Fragment instance
             return quizFragments[position];
+
         } else if (position == questions.length) {
-            System.out.println("correctAnswers:  " + getCorrectAnswers());
-            result = ResultFragment.newInstance(currPage, this);
-            return result;
+            // ResultFragment creation
+            return ResultFragment.newInstance(getCorrectAnswers());
         } else {
             // Return a default or empty Fragment in case of an invalid position
             return new Fragment();
@@ -63,7 +60,7 @@ public class QuizPagerAdapter extends FragmentStateAdapter {
     @Override
     public int getItemCount() {
         // Return the number of questions or the number of fragments you want to display
-        return questions.length + 1;
+        return questions.length + 2;
     }
 
     public int getCorrectAnswers() {

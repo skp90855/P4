@@ -95,21 +95,4 @@ public class QuizFragment extends Fragment {
         });
     }
 
-    /*
-    public void isAnswerCorrect(int index) {
-        // get selected radio button from radioGroup
-        int selectedId = radioGroup.getCheckedRadioButtonId();
-
-        // find the radiobutton by returned id
-        RadioButton radioButton = getView().findViewById(selectedId);
-        if(selectedId != -1) {
-            System.out.println(radioButton.getText());
-        }
-        System.out.println("SelctedID:  "+ selectedId);
-        System.out.println(radioGroup);
-        //System.out.println(radioButton.getText());
-
-        //if(radioButton.getTe)
-    }
-     */
 }

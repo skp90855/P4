@@ -7,7 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
 import androidx.fragment.app.Fragment;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class ResultFragment extends Fragment {
 
@@ -17,7 +22,7 @@ public class ResultFragment extends Fragment {
 
     }
     // Create a new instance of the ResultFragment and pass the number of correct answers
-    public static ResultFragment newInstance(int correctAnswers, QuizPagerAdapter currQuiz) {
+    public static ResultFragment newInstance(int correctAnswers) {
         ResultFragment fragment = new ResultFragment();
         Bundle args = new Bundle();
         args.putInt("correctAnswers", correctAnswers);
@@ -39,20 +44,34 @@ public class ResultFragment extends Fragment {
 
         // Display the results
         TextView resultTextView = view.findViewById(R.id.resultTextView);
-        resultTextView.setText("Click button below to view results!");
-        Button button = view.findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), QuizResult.class);
-                int correct = correctAnswers;
-                intent.putExtra("correct", correct);
-                startActivity(intent);
-            }
+        resultTextView.setText("Your score: " + correctAnswers + " out of " + 6);
+
+        // Store the result in the database
+        QuizData quizData = new QuizData(getContext());
+        quizData.open();
+        String currentTime = getCurrentTime();
+        quizData.storeQuizResult(currentTime, correctAnswers);
+        quizData.close();
+
+        // Add a button to go back to the SplashActivity
+        Button backButton = view.findViewById(R.id.backButton); // Make sure you have this button in your layout
+        backButton.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), SplashActivity.class);
+            startActivity(intent);
+            getActivity().finish();
         });
 
         return view;
     }
+
+    // Helper method to get current time in a formatted string for API level 24
+    private String getCurrentTime() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault());
+        return sdf.format(Calendar.getInstance().getTime());
+    }
+
+
+
 
     public void setCorrectAnswers(int num) {
         correctAnswers = num;

@@ -15,12 +15,18 @@ import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
+    //A boolean variable to keep track of whether swiping is enabled in the ViewPager2
+    private boolean isSwipingEnabled = true;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Setting the content view to the layout defined in xml file
         setContentView(R.layout.activity_main);
 
-        // Read data from the CSV file and populate questions and answerChoices
+        //Reading data from the CSV file and populate questions and answerChoices
         String[] questions = new String[6];
         String[] correctAnswers = new String[6];
         String[][] answerChoices = new String[6][3];
@@ -31,13 +37,13 @@ public class MainActivity extends AppCompatActivity {
             List<String[]> csvData = new ArrayList<>();
             String line;
 
-            // Read and store CSV data
+            //Reading and storing CSV data
             while ((line = bufferedReader.readLine()) != null) {
                 String[] data = line.split(",");
                 csvData.add(data);
             }
 
-            // Choose random states and capital cities without repeats
+            //Choosing random states and capital cities without repeats
             Random random = new Random();
             Set<Integer> selectedIndices = new HashSet<>();
 
@@ -51,25 +57,27 @@ public class MainActivity extends AppCompatActivity {
 
                 String[] data = csvData.get(randomIndex);
 
+                //Getting the state and the capital city associated with the state
                 String state = data[0];
                 String correctCapital = data[1];
+
                 questions[i] = "What is the capital of " + state + "?";
                 correctAnswers[i] = data[1];
 
-                // Choose two incorrect capital cities
+                //Choosing two incorrect capital cities
                 List<String> incorrectCities = new ArrayList<>();
                 for (int j = 2; j < data.length; j++) {
                     incorrectCities.add(data[j]);
                 }
                 incorrectCities.remove(correctCapital);
 
-                // Randomly shuffle the choices
+                //Randomly shuffling the choices
                 List<String> choices = new ArrayList<>();
                 choices.add(correctCapital);
                 choices.add(incorrectCities.get(0));
                 choices.add(incorrectCities.get(1));
 
-                // Shuffle the choices to randomize their order
+                //Shuffling the choices to randomize their order
                 for (int j = 0; j < 3; j++) {
                     int index = random.nextInt(choices.size());
                     answerChoices[i][j] = choices.get(index);
@@ -83,16 +91,27 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+        //Finding the ViewPager2 defined in the layout and disabling user swiping initially
         ViewPager2 pager = findViewById(R.id.viewpager);
+        pager.setUserInputEnabled(false);
+
+        //Creating an instance of QuizPagerAdapter with the questions and answers
         QuizPagerAdapter quizPagerAdapter = new QuizPagerAdapter(
                 getSupportFragmentManager(), getLifecycle(), questions, answerChoices, correctAnswers);
+
+        //Setting the orientation of the ViewPager2 to horizontal
         pager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
+        //Setting the adapter of the ViewPager2 to the instance of QuizPagerAdapter
         pager.setAdapter(quizPagerAdapter);
         pager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
+
                 super.onPageSelected(position);
-                quizPagerAdapter.getCorrectAnswers();
+
+                //Enabling or disabling swiping based on the current position.
+                isSwipingEnabled = position < 6;
+                pager.setUserInputEnabled(isSwipingEnabled);
             }
         });
 
