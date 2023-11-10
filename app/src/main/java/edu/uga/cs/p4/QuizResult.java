@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.time.Instant;
@@ -54,12 +55,20 @@ public class QuizResult extends AppCompatActivity {
             System.out.println("There is no quiz data available");
         } else {
             StringBuffer buffer = new StringBuffer();
+            String pastResults = "";
             while(res.moveToNext()) {
                 buffer.append("Date Comepleted: " + res.getString(1) + "\n");
                 buffer.append("Correct Questions: " + res.getString(2) + "\n\n");
+                pastResults = "Date Comepleted: " + res.getString(1) + "\n" + "Correct Questions: " + res.getString(2) + "\n\n" + pastResults;
             }
             System.out.println(buffer.toString());
+            resultTextView.setText(pastResults);
         }
+        Button homeButton = findViewById(R.id.button);
+        homeButton.setOnClickListener(v -> {
+            Intent intent = new Intent(QuizResult.this, SplashActivity.class);
+            startActivity(intent);
+        });
 
     }
 }

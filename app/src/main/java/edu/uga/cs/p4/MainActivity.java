@@ -3,6 +3,8 @@ package edu.uga.cs.p4;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.widget.Button;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 import java.io.BufferedReader;
@@ -10,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -94,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-
         //Finding the ViewPager2 defined in the layout and disabling user swiping initially
         ViewPager2 pager = findViewById(R.id.viewpager);
         pager.setUserInputEnabled(false);
@@ -135,6 +137,8 @@ public class MainActivity extends AppCompatActivity {
         DB.clearPreviousQuiz();
         for(int i = 0; i < 6; i++) {
             boolean inserted = DB.insertQuesitons(questions[i], actualAnswers[i], answerChoices[i][0], answerChoices[i][1], answerChoices[i][2], chosenAnswer[i]);
+            System.out.println("inserting index: " + i);
+            System.out.println(questions[i]);
             if(inserted) {
                 System.out.println("inserted current quiz");
             } else {
@@ -149,8 +153,9 @@ public class MainActivity extends AppCompatActivity {
        System.out.println("Resume");
         QuizDatabaseHelper DB = new QuizDatabaseHelper(this);
         Cursor res = DB.getQuestionsData();
-        if(res.getCount() == 0) {
+        if(res.getCount() != 6) {
             System.out.println("There is no quiz data available");
+            System.out.println(res.getCount());
         } else {
             int[] chosenAnswers = new int[6];
             String[][] answer_choices = new String[6][3];
@@ -166,6 +171,8 @@ public class MainActivity extends AppCompatActivity {
                 actualAnswers[i] = res.getString(2);
                 i++;
             }
+            System.out.println(Arrays.toString(newQuestions));
+            System.out.println(Arrays.toString(actualAnswers));
             quizPagerAdapter.updateCurrQuiz(chosenAnswers, answer_choices, newQuestions, actualAnswers);
 
         }

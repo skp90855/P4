@@ -5,6 +5,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import java.util.Arrays;
+
 public class QuizPagerAdapter extends FragmentStateAdapter {
 
     private String[] questions;
@@ -31,6 +33,7 @@ public class QuizPagerAdapter extends FragmentStateAdapter {
         this.actualAnswer = correctAnswers;
         quizFragments = new QuizFragment[6];
         chosenAnswers = new int[]{-1, -1, -1, -1, -1, -1};
+        System.out.println(Arrays.toString(questions));
     }
 
     // Modify createFragment to handle the ResultFragment

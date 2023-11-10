@@ -26,5 +26,14 @@ public class SplashActivity extends AppCompatActivity {
                 finish(); // Close the splash activity
             }
         });
+        Button viewResults = findViewById(R.id.button2);
+        viewResults.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SplashActivity.this, QuizResult.class);
+                startActivity(intent);
+                finish(); // Close the splash activit
+            }
+        });
     }
 }

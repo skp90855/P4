@@ -74,7 +74,7 @@ public class QuizDatabaseHelper extends SQLiteOpenHelper {
     public boolean insertQuesitons(String question, String capitalCity, String choiceOne, String choiceTwo, String choiceThree, int chosenAnswer) {
 
         SQLiteDatabase DB = this.getWritableDatabase();
-        DB.execSQL("delete from Questions");
+        //DB.execSQL("delete from Questions");
         ContentValues contentValues = new ContentValues();
         contentValues.put("question", question);
         contentValues.put("capital_city", capitalCity);
