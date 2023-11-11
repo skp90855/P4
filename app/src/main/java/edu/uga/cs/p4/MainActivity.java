@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         String[] questions = new String[6];
         String[] correctAnswers = new String[6];
         String[][] answerChoices = new String[6][3];
-        //this.deleteDatabase("QuizApp.db"); Uncomment this to delete db for any updates
+        //this.deleteDatabase("QuizApp.db"); //Uncomment this to delete db for any updates
 
         try {
             InputStream inputStream = getAssets().open("StateCapitals.csv");

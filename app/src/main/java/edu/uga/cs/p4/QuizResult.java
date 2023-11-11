@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -35,6 +36,7 @@ public class QuizResult extends AppCompatActivity {
             e.printStackTrace();
         }
         resultTextView = findViewById(R.id.textView);
+        resultTextView.setMovementMethod(new ScrollingMovementMethod());
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             //Instant now = Instant.now();
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu/MM/dd HH:mm:ss");
@@ -44,7 +46,7 @@ public class QuizResult extends AppCompatActivity {
             System.out.println("Time submitted: " + dtf.format(zonedTime));
             timeSubmitted = dtf.format(zonedTime);
         }
-        resultTextView.setText("You got " + correct + " out of 6 questions correct.\nSubmission Date: " + timeSubmitted);
+        resultTextView.setText("No quiz data available");
         new AsyncTask<ThreadInstructionHandler, String>().execute(new ThreadInstructionHandler<QuizResult>("read", this));
         /*
         boolean inserted = DB.insertQuizData(timeSubmitted, ""+correct);
