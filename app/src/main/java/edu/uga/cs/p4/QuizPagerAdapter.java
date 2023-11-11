@@ -55,7 +55,8 @@ public class QuizPagerAdapter extends FragmentStateAdapter {
 
         } else if (position == questions.length) {
             // ResultFragment creation
-            return ResultFragment.newInstance(getCorrectAnswers());
+            result = ResultFragment.newInstance(getCorrectAnswers());
+            return result;
         } else {
             // Return a default or empty Fragment in case of an invalid position
             return new Fragment();
@@ -138,6 +139,10 @@ public class QuizPagerAdapter extends FragmentStateAdapter {
             quizFragments[i].updateQuizFragment(new_questions[i], answer_choices[i][0], answer_choices[i][1], answer_choices[i][2], actual_answers[i], chosen_answers[i]);
             i++;
         }
+    }
+    public void finishQuiz() {
+        int amountCorrect = getCorrectAnswers();
+        result.saveQuizResults(amountCorrect);
     }
 
 }

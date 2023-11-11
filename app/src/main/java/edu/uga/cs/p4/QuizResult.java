@@ -18,6 +18,8 @@ public class QuizResult extends AppCompatActivity {
 
     int correct;
     QuizDatabaseHelper DB;
+
+    TextView resultTextView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +34,7 @@ public class QuizResult extends AppCompatActivity {
         } catch(Exception e) {
             e.printStackTrace();
         }
-        TextView resultTextView = findViewById(R.id.textView);
+        resultTextView = findViewById(R.id.textView);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             //Instant now = Instant.now();
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu/MM/dd HH:mm:ss");
@@ -43,13 +45,16 @@ public class QuizResult extends AppCompatActivity {
             timeSubmitted = dtf.format(zonedTime);
         }
         resultTextView.setText("You got " + correct + " out of 6 questions correct.\nSubmission Date: " + timeSubmitted);
+        new AsyncTask<ThreadInstructionHandler, String>().execute(new ThreadInstructionHandler<QuizResult>("read", this));
+        /*
         boolean inserted = DB.insertQuizData(timeSubmitted, ""+correct);
         if(inserted) {
             System.out.println("New entry has been inserted");
         } else {
             System.out.println("Failed to insert new entry");
         }
-
+        */
+        /*
         Cursor res = DB.getQuizData();
         if(res.getCount() == 0) {
             System.out.println("There is no quiz data available");
@@ -64,11 +69,30 @@ public class QuizResult extends AppCompatActivity {
             System.out.println(buffer.toString());
             resultTextView.setText(pastResults);
         }
+
+         */
         Button homeButton = findViewById(R.id.button);
         homeButton.setOnClickListener(v -> {
             Intent intent = new Intent(QuizResult.this, SplashActivity.class);
             startActivity(intent);
         });
 
+    }
+
+    public void readFromDB(){
+        Cursor res = DB.getQuizData();
+        if(res.getCount() == 0) {
+            System.out.println("There is no quiz data available");
+        } else {
+            StringBuffer buffer = new StringBuffer();
+            String pastResults = "";
+            while(res.moveToNext()) {
+                buffer.append("Date Comepleted: " + res.getString(1) + "\n");
+                buffer.append("Correct Questions: " + res.getString(2) + "\n\n");
+                pastResults = "Date Comepleted: " + res.getString(1) + "\n" + "Correct Questions: " + res.getString(2) + "\n\n" + pastResults;
+            }
+            System.out.println(buffer.toString());
+            resultTextView.setText(pastResults);
+        }
     }
 }

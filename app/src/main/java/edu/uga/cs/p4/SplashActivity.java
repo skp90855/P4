@@ -15,6 +15,7 @@ public class SplashActivity extends AppCompatActivity {
 
         //Initializing the button
         Button buttonOpenMain = findViewById(R.id.buttonOpenMain);
+        new AsyncTask<Integer, Integer>().execute();
 
         //Setting a click listener for the button
         buttonOpenMain.setOnClickListener(new View.OnClickListener() {

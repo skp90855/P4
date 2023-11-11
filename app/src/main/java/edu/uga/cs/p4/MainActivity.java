@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
     //A boolean variable to keep track of whether swiping is enabled in the ViewPager2
     private boolean isSwipingEnabled = true;
+    private boolean inInitialStartup = false;
 
 
     QuizPagerAdapter quizPagerAdapter;
@@ -109,17 +110,23 @@ public class MainActivity extends AppCompatActivity {
         pager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
         //Setting the adapter of the ViewPager2 to the instance of QuizPagerAdapter
         pager.setAdapter(quizPagerAdapter);
+        QuizDatabaseHelper DB = new QuizDatabaseHelper(this);
         pager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
 
                 super.onPageSelected(position);
-
+                if(position == 6) {
+                    quizPagerAdapter.finishQuiz();
+                    DB.clearPreviousQuiz();
+                }
                 //Enabling or disabling swiping based on the current position.
                 isSwipingEnabled = position < 6;
                 pager.setUserInputEnabled(isSwipingEnabled);
             }
         });
+
+        new AsyncTask<ThreadInstructionHandler, String>().execute(new ThreadInstructionHandler<MainActivity>("write", this));
 
 
     }
@@ -128,7 +135,64 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         System.out.println("Paused");
+        new AsyncTask<ThreadInstructionHandler, String>().execute(new ThreadInstructionHandler<MainActivity>("write", this));
+        /*
+        String[] questions = quizPagerAdapter.getQuestions();
+        String[][] answerChoices = quizPagerAdapter.getAnswerChoices();
+        String[] actualAnswers = quizPagerAdapter.getActualAnswer();
+        int[] chosenAnswer = quizPagerAdapter.getChosenAnswers();
+        QuizDatabaseHelper DB = new QuizDatabaseHelper(this);
+        DB.clearPreviousQuiz();
+        for(int i = 0; i < 6; i++) {
+            boolean inserted = DB.insertQuesitons(questions[i], actualAnswers[i], answerChoices[i][0], answerChoices[i][1], answerChoices[i][2], chosenAnswer[i]);
+            System.out.println("inserting index: " + i);
+            System.out.println(questions[i]);
+            if(inserted) {
+                System.out.println("inserted current quiz");
+            } else {
+                System.out.println("current quiz was not successfully inserted");
+            }
+        }
 
+         */
+    }
+
+    @Override
+    protected void onResume() {
+       super.onResume();
+       System.out.println("Resume");
+       new AsyncTask<ThreadInstructionHandler, String>().execute(new ThreadInstructionHandler<MainActivity>("read", this));
+       /*
+        QuizDatabaseHelper DB = new QuizDatabaseHelper(this);
+        Cursor res = DB.getQuestionsData();
+        if(res.getCount() != 6) {
+            System.out.println("There is no quiz data available");
+            System.out.println(res.getCount());
+        } else {
+            int[] chosenAnswers = new int[6];
+            String[][] answer_choices = new String[6][3];
+            String[] newQuestions = new String[6];
+            String[] actualAnswers = new String[6];
+            int i = 0;
+            while(res.moveToNext() && i < 6) {
+                chosenAnswers[i] = res.getInt(6);
+                answer_choices[i][0] = res.getString(3);
+                answer_choices[i][1] = res.getString(4);
+                answer_choices[i][2] = res.getString(5);
+                newQuestions[i] = res.getString(1);
+                actualAnswers[i] = res.getString(2);
+                i++;
+            }
+            System.out.println(Arrays.toString(newQuestions));
+            System.out.println(Arrays.toString(actualAnswers));
+            quizPagerAdapter.updateCurrQuiz(chosenAnswers, answer_choices, newQuestions, actualAnswers);
+
+        }
+
+        */
+    }
+
+    public void writeToDB() {
         String[] questions = quizPagerAdapter.getQuestions();
         String[][] answerChoices = quizPagerAdapter.getAnswerChoices();
         String[] actualAnswers = quizPagerAdapter.getActualAnswer();
@@ -147,16 +211,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onResume() {
-       super.onResume();
-       System.out.println("Resume");
+    public void readFromDB() {
         QuizDatabaseHelper DB = new QuizDatabaseHelper(this);
         Cursor res = DB.getQuestionsData();
         if(res.getCount() != 6) {
             System.out.println("There is no quiz data available");
             System.out.println(res.getCount());
         } else {
+            System.out.println(res.getCount());
             int[] chosenAnswers = new int[6];
             String[][] answer_choices = new String[6][3];
             String[] newQuestions = new String[6];

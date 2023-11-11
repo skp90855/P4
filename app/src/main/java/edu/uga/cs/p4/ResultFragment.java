@@ -17,6 +17,7 @@ import java.util.Locale;
 public class ResultFragment extends Fragment {
 
     private int correctAnswers;
+    private TextView resultTextView;
 
     public ResultFragment() {
 
@@ -43,15 +44,17 @@ public class ResultFragment extends Fragment {
         View view = inflater.inflate(R.layout.result_fragment, container, false);
 
         // Display the results
-        TextView resultTextView = view.findViewById(R.id.resultTextView);
+        resultTextView = view.findViewById(R.id.resultTextView);
         resultTextView.setText("Your score: " + correctAnswers + " out of " + 6);
 
+        /*
         // Store the result in the database
         QuizData quizData = new QuizData(getContext());
         quizData.open();
         String currentTime = getCurrentTime();
         quizData.storeQuizResult(currentTime, correctAnswers);
         quizData.close();
+         */
 
         // Add a button to go back to the SplashActivity
         Button backButton = view.findViewById(R.id.backButton); // Make sure you have this button in your layout
@@ -75,6 +78,23 @@ public class ResultFragment extends Fragment {
 
     public void setCorrectAnswers(int num) {
         correctAnswers = num;
+    }
+
+    public void saveQuizResults(int correctAmount) {
+        // Display the results
+        resultTextView.setText("Your score: " + correctAmount + " out of " + 6);
+        correctAnswers = correctAmount;
+
+        new AsyncTask<ThreadInstructionHandler, String>().execute(new ThreadInstructionHandler<ResultFragment>("write", this));
+    }
+
+    public void writeToDB() {
+        // Store the result in the database
+        QuizData quizData = new QuizData(getContext());
+        quizData.open();
+        String currentTime = getCurrentTime();
+        quizData.storeQuizResult(currentTime, correctAnswers);
+        quizData.close();
     }
 
 }

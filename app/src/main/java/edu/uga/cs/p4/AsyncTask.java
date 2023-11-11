@@ -1,5 +1,6 @@
 package edu.uga.cs.p4;
 
+import java.lang.reflect.Method;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -13,7 +14,7 @@ import android.os.Looper;
  * @param <Param> type of the input parameter for doInBackground
  * @param <Result> type of the result value returned by doInBackground
  */
-public abstract class AsyncTask<Param,Result> {
+public class AsyncTask<Param,Result> {
 
     // An internal method to execute something in background
     private void executeInBackground( Param... params ) {
@@ -75,6 +76,19 @@ public abstract class AsyncTask<Param,Result> {
     }
 
     // These abstract methods are just like in the AsyncTask class
-    protected abstract Result doInBackground( Param... arguments );
-    protected abstract void onPostExecute( Result result );
+    protected Result doInBackground( Param... arguments ) {
+        System.out.println("do in background");
+        Result values = null;
+        try {
+            Method m = arguments[0].getClass().getMethod("executeInstruction");
+            m.invoke(arguments[0]);
+        } catch(Exception e) {
+            System.out.println("error executing instruction");
+            System.out.println(e);
+        }
+        return values;
+    }
+    protected void onPostExecute( Result result ) {
+        System.out.println("Post execution activated");
+    }
 }
